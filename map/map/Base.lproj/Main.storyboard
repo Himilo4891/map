@@ -43,6 +43,7 @@
                                     <action selector="Login:" destination="BYZ-38-t0r" eventType="touchUpInside" id="apX-H1-eei"/>
                                     <action selector="Login:" destination="gw2-FJ-b2w" eventType="touchUpInside" id="xrc-GC-HTV"/>
                                     <action selector="login:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Liq-wE-esV"/>
+                                    <segue destination="FhP-Cr-Abp" kind="show" id="HV6-t8-dbs"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Don't have an account?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sT2-wJ-7wA">
@@ -59,6 +60,7 @@
                                 <buttonConfiguration key="configuration" style="plain" title="Sing up"/>
                                 <connections>
                                     <action selector="SingUp:" destination="BYZ-38-t0r" eventType="touchUpInside" id="69w-4B-wwb"/>
+                                    <action selector="signUp:" destination="BYZ-38-t0r" eventType="touchUpInside" id="izf-ma-Si0"/>
                                 </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Image 3" translatesAutoresizingMaskIntoConstraints="NO" id="tv5-pn-aax">
@@ -92,7 +94,7 @@
             <objects>
                 <viewController id="nZV-n6-dqi" customClass="TabBarViewController" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="9cf-js-L0v">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="783"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="On the Map" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ago-Gm-0Ma">
@@ -118,6 +120,7 @@
                                 <buttonConfiguration key="configuration" style="plain" image="plus" catalog="system"/>
                                 <connections>
                                     <action selector="add:" destination="nZV-n6-dqi" eventType="touchUpInside" id="HO9-Ic-eMo"/>
+                                    <segue destination="qqZ-S5-1Dv" kind="push" id="Nx8-W5-qxA"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="egL-wS-ovl">
@@ -147,7 +150,7 @@
             <objects>
                 <viewController id="ucv-r6-Uqb" customClass="MapViewController" customModule="map" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Mp3-Mt-pfU">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="783"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="qzw-gX-xsK">
@@ -195,7 +198,7 @@
                         <viewControllerLayoutGuide type="bottom" id="vZA-7w-s4c"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Pon-U5-dZd">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="783"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Ga-9N-5T8">
@@ -227,6 +230,7 @@
                                 <buttonConfiguration key="configuration" style="filled" title="FInd  Location"/>
                                 <connections>
                                     <action selector="findLocation:" destination="qqZ-S5-1Dv" eventType="touchUpInside" id="isK-I8-TbV"/>
+                                    <segue destination="X6l-eI-Ngm" kind="push" id="HWa-aU-s0n"/>
                                 </connections>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Image 1" translatesAutoresizingMaskIntoConstraints="NO" id="jWU-hE-Ovr">
@@ -266,7 +270,7 @@
             <objects>
                 <viewController id="X6l-eI-Ngm" customClass="AddLocationViewController" customModule="map" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="RPB-cZ-0Y2">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="783"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="bQE-Km-Jbu">
@@ -280,6 +284,9 @@
                                 <color key="tintColor" systemColor="systemCyanColor"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="FINSH"/>
+                                <connections>
+                                    <action selector="finishButtonPressed:" destination="X6l-eI-Ngm" eventType="touchUpInside" id="fva-Ua-ktU"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Add Loaction" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xRJ-cU-miL">
                                 <rect key="frame" x="138" y="59" width="116" height="24"/>
@@ -296,6 +303,7 @@
                         <viewLayoutGuide key="safeArea" id="Tp2-8m-qVD"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <navigationItem key="navigationItem" id="mc8-pJ-iid"/>
                     <connections>
                         <outlet property="activityIndicatorView" destination="XZF-ff-E7x" id="uVk-Ys-Q16"/>
                         <outlet property="finishButton" destination="aD5-zz-40V" id="X2z-aB-8dR"/>

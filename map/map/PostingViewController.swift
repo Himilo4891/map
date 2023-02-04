@@ -9,8 +9,8 @@ import MapKit
 
 class PostingViewController: UIViewController {
 
-    @IBOutlet weak var Locationtext: UITextField!
-    @IBOutlet weak var mediaURL: UITextField!
+    @IBOutlet weak var LocationText: UITextField!
+    @IBOutlet weak var mediaURLText: UITextField!
     @IBOutlet weak var findLocation: UIButton!
     //IBOutlets
     @IBOutlet weak var image: UIImageView!
@@ -28,12 +28,12 @@ class PostingViewController: UIViewController {
         self.activityIndicatorView.hidesWhenStopped = true
        
         //Set textfields to empty
-        self.Locationtext.text = ""
-        self.mediaURL.text = ""
+        self.LocationText.text = ""
+        self.mediaURLText.text = ""
         
         //Assign delegates for textFields
-        self.Locationtext.delegate = self
-        self.mediaURL.delegate = self
+        self.LocationText.delegate = self
+        self.mediaURLText.delegate = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -55,9 +55,9 @@ class PostingViewController: UIViewController {
     //MARK: - findLocation: Reverse geolocate from string, if successful save date for passing to AddLocationsViewController
     @IBAction func findLocation(_ sender: Any) {
         setFindLocation(true)
-        if self.Locationtext.text != "" && self.mediaURL.text != "" {
-            self.mapString = Locationtext.text
-            self.mediaURL = mapString.text
+        if self.LocationText.text != "" && self.mediaURLText.text != "" {
+            self.mapString = LocationText.text
+            self.mediaURL = mediaURLText.text
             getCoordinate(addressString: mapString, completionHandler: handleGeoLocation(location:error:))
         }else{
             showAlert(ofType: .emptyFields, message: "Some of the fields are still empty")
@@ -73,7 +73,7 @@ class PostingViewController: UIViewController {
         }
     }
     //MARK: - showAlert: Create an alert with dynamic titles according to the type of error
-    func showAlert(ofType type: AlertNotification.ofType, message: String){
+    func showAlert(ofType type: AlertNotification.ofType, message: String) {
         let alertVC = UIAlertController(title: type.getTitles.ofController, message: message, preferredStyle: .alert)
         alertVC.addAction(UIAlertAction(title: type.getTitles.ofAction, style: .default, handler: nil))
         present(alertVC, animated: true)
@@ -139,7 +139,7 @@ class PostingViewController: UIViewController {
    @objc func keyboardWillShow(_ notification:Notification) {
        /*Set view y value upper for keyboard to not hide the textfield and verify that
        it is only for the bottom textfield, if not both will push the view upper */
-       if self.mediaURL.isEditing {
+       if self.mediaURLText.isEditing {
            view.frame.origin.y -= getKeyboardHeight(notification)
        }
    }
@@ -148,7 +148,7 @@ class PostingViewController: UIViewController {
    @objc func keyboardWillHide(_ notification:Notification) {
        //Set view y value back to origin when keyboard will be dismissed
        //Can also be set as view.frame.origin.y = 0
-       if self.mediaURL.isEditing {
+       if self.mediaURLText.isEditing {
            view.frame.origin.y += getKeyboardHeight(notification)
        }
    }

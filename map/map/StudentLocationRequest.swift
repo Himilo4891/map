@@ -15,7 +15,5 @@ struct StudentLocationRequest:Codable {
     let mediaURL: String
     let latitude: Double
     let longitude: Double
-    let results: String
-    let objectId: String
-    let data: Data
+  
 }

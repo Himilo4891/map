@@ -17,8 +17,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var SingUp: UIButton!
     @IBOutlet weak var activityViewIndicatior: UIActivityIndicatorView!
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewWillAppear(_ animated: Bool) {
+           super.viewWillAppear(animated)
         //Hide activity indicatory when stops
         self.activityViewIndicatior.hidesWhenStopped = true
         
@@ -41,37 +41,46 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         UIApplication.shared.open(UdacityClient.Endpoints.signUp.url, options: [:], completionHandler: nil)
     }
     //MARK: - showAlert: Create an alert with dynamic titles according to the type of error
-    func showAlert(ofType type: AlertNotification.ofType, message: String){
-        let alertVC = UIAlertController(title: type.getTitles.ofController, message: message, preferredStyle: .alert)
-        alertVC.addAction(UIAlertAction(title: type.getTitles.ofAction, style: .default, handler: nil))
-        show(alertVC,sender: nil)
+    func showAlert(message: String) {
+        let alertVC = UIAlertController(title: "Login Failed", message: message, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        show(alertVC, sender: nil)
         setLogin(false)
     }
     
-    //MARK: - handleLoginResponse: If successful login getuser info and student locations
-    func handleLoginResponse(success:Bool, error:Error?){
-        if success {
-            UdacityClient.getUserData(completionHandler: handleGetUserData(success:error:))
-            UdacityClient.getStudentsLocationData(completionHandler: handleStudentsLocationData(data:error:))
-        } else {
-            self.showAlert(ofType: .loginFailed, message: error?.localizedDescription ?? "")
+    func handleLoginResponse(success: Bool, error: Error?) {
+        DispatchQueue.main.async {
+            if success {
+                print("hello")
+                self.performSegue(withIdentifier: "completeLogin", sender: nil)
+            } else {
+                print("hello 5")
+                self.showLoginFailure(message: error?.localizedDescription ?? "")
+            }
         }
     }
     
-    //MARK: - handleGetUserData: If userdata failed to retrieve show alert
-    func handleGetUserData(success: Bool, error: Error?){
-        if !success {
-            self.showAlert(ofType: .retrieveUserDataFailed, message: error?.localizedDescription ?? "")
+    func handleSessionResponse(success: Bool, error: Error?) {
+        setLogin(true)
+        if success {
+            print("hello 2")
+            performSegue(withIdentifier: "completeLogin", sender: nil)
+        } else {
+            print("hello 6")
+            showLoginFailure(message: error?.localizedDescription ?? "")
         }
     }
-    //MARK: - handleStudentsLocationData: If user locations was successful save if not show alert
-    func handleStudentsLocationData(data: [StudentInformation], error: Error? ){
-        if error != nil {
-            self.showAlert(ofType: .retrieveUsersLocationFailed, message: error?.localizedDescription ?? "")
-        } else{
-            StudentLocationRequest.data = data
-            setLogin(false)
-            self.performSegue(withIdentifier: "completeLogin", sender: nil)
+    
+    func showLoginFailure(message: String) {
+        let alertVC = UIAlertController(title: "Login Failed", message: message, preferredStyle: .alert)
+        alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        show(alertVC, sender: nil)
+    }
+    
+    func handleRequestTokenResponse(success: Bool, error: Error?) {
+        if success {
+            print("hello 4")
+            UdacityClient.login(Email: self.Email.text ?? "", Password: self.Password.text ?? "", completionHandler: self.handleLoginResponse(success:error:))
         }
     }
     //MARK: - setLogin: Control the activityViewIndicatior when to start and stop animating
@@ -86,14 +95,19 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         Login.isEnabled = !isLogin
         SingUp.isEnabled = !isLogin
     }
-}
-
-extension LoginViewController: UITextFieldDelegate {
     
-    //MARK: textFieldShouldReturn: Dismiss keyboard if return was pressed
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
-    }
+       override func viewDidLoad() {
+           let attributedString = NSMutableAttributedString(string: "Don't have an account? Sign up.")
+           attributedString.addAttribute(.link, value: "https://auth.udacity.com/sign-up", range: NSRange(location: 23, length: 8))
+
+//           webLink.attributedText = attributedString
+       }
+       
+       func textView(_ textView: UILabel, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
+           UIApplication.shared.open(URL)
+           return false
+       }
+
+
 }
 

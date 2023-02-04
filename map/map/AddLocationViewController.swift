@@ -2,7 +2,7 @@
 import UIKit
 import MapKit
 
-class AddLocationViewController: UIViewController {
+class AddLocationViewController: UIViewController, MKMapViewDelegate {
 
     //IBOutlets
     @IBOutlet weak var mapView: MKMapView!
@@ -25,94 +25,103 @@ class AddLocationViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(true)
+        super.viewDidAppear(animated)
         //Generate the point in the map when the view appear
-        generatePointInMap()
+     
     }
-    //MARK: - submitLocation: Submit the obtained point to Udacity's servers
-    @IBAction func submitLocation(_ sender: Any) {
-        isPostingLocation(true)
-        UdacityClient.createStudentLocation(mapString: mapString, mediaURL: mediaURL, coordinates: (geoLocation.latitude,   geoLocation.longitude), completionHandler: handleCreateLocationResponse(success:error:))
-    }
-    //MARK: centerMapOnLocation: Zoom in to the coordinates entered by user
-    func centerMapOnLocation(_ location: CLLocation, mapView: MKMapView) {
-        let regionRadius: CLLocationDistance = 5000
-        let coordinateRegion = MKCoordinateRegion(center: location.coordinate,
-                                                  latitudinalMeters: regionRadius * 2.0, longitudinalMeters: regionRadius * 2.0)
-        mapView.setRegion(coordinateRegion, animated: true)
-    }
-    //MARK: - generatePointInMap: Generate the annotation for the location entered
-    func generatePointInMap(){
-        
-        var annotations = [MKPointAnnotation]()
-
-        let lat = CLLocationDegrees(geoLocation.latitude)
-        let long = CLLocationDegrees(geoLocation.longitude)
-
-        // The lat and long to create a CLLocationCoordinates2D instance.
-        let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: long)
-
-        // Here we create the annotation and set its coordiate, title, and subtitle properties
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = coordinate
-
-        // Place the annotation in an array of annotations.
-        annotations.append(annotation)
-
-        // When the array is complete, add the annotations to the map.
-        self.mapView.addAnnotations(annotations)
-        
-        centerMapOnLocation(CLLocation(latitude: lat, longitude: long), mapView: mapView)
-    }
-    //MARK: - handleCreateLocationResponse: If successful dismiss the view if not show alert
-    func handleCreateLocationResponse(success: Bool, error: Error?){
-        if success {
-            isPostingLocation(false)
+    override func viewWillAppear(_ animated: Bool) {
+            self.mapView.alpha = 0.0
+            UIView.animate(withDuration: 1.0, delay: 0, options: [], animations: {
+                self.mapView.alpha = 1.0
+            })
             
-            self.dismiss(animated: true, completion: nil)
-        } else {
-            showAlert(ofType: .createLocationFailed, message: error?.localizedDescription ?? "")
-        }
-    }
-    //MARK: - showAlert: Create an alert with dynamic titles according to the type of error
-    func showAlert(ofType type: AlertNotification.ofType, message: String){
-        let alertVC = UIAlertController(title: type.getTitles.ofController, message: message, preferredStyle: .alert)
-        alertVC.addAction(UIAlertAction(title: type.getTitles.ofAction, style: .default, handler: nil))
-        present(alertVC, animated: true)
-        isPostingLocation(false)
-    }
-    
-    //MARK: - isPostingLocation: Control the activityViewIndicatior when to start and stop animating
-    func isPostingLocation(_ hasPosted: Bool){
-        if hasPosted{
-            activityIndicatorView.startAnimating()
-        }else{
-            activityIndicatorView.stopAnimating()
-        }
-        finishButton.isEnabled = !hasPosted
-    }
-
-}
-
-extension AddLocationViewController: MKMapViewDelegate{
-
-    // MARK: - MKMapViewDelegate
-    
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        
-        let reuseId = "pin"
-        
-        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKMarkerAnnotationView
-
-        if pinView == nil {
-            pinView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-            pinView!.pinTintColor = .red
-        }
-        else {
-            pinView!.annotation = annotation
         }
         
-        return pinView
+    @objc func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+            if control == view.rightCalloutAccessoryView {
+                if let toOpen = view.annotation?.subtitle! {
+                    UIApplication.shared.open(URL(string: toOpen)!, options: [:], completionHandler: nil)
+                }
+            }
+        }
+        
+    @objc(mapView:viewForAnnotation:) func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+            let reuseId = "pin"
+            
+            var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKMarkerAnnotationView
+            
+            if pinView == nil {
+                pinView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+                pinView!.canShowCallout = true
+                pinView!.pinTintColor = .red
+            } else {
+                pinView!.annotation = annotation
+            }
+            
+            return pinView
+        }
+        
+        
+        @IBAction func finishButtonPressed(_ sender: Any) {
+            UdacityAPI.getPublicUserData(completion: handlePublicUserData(firstName:lastName:error:))
+            
+        }
+        
+        
+        
+        
+        func searchLocation(){
+            let searchRequest = MKLocalSearch.Request()
+            searchRequest.naturalLanguageQuery = LocationResults
+            let search = MKLocalSearch(request: searchRequest)
+            search.start { (response, error) in
+                guard let response = response else {
+                    let alertVC = UIAlertController(title: "Location not found.", message: "Please input another location.", preferredStyle: .alert)
+                    alertVC.addAction(UIAlertAction(title: "OK", style: .default, handler: {_ in self.navigationController?.popViewController(animated: true)}))
+                    self.present(alertVC, animated: true, completion: nil)
+                    return
+                }
+                
+                let pin = MKPointAnnotation()
+                pin.coordinate = response.mapItems[0].placemark.coordinate
+                pin.title = response.mapItems[0].name
+                self.mapView.addAnnotation(pin)
+                self.mapView.setCenter(pin.coordinate, animated: true)
+                let region = MKCoordinateRegion(center: pin.coordinate, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
+                self.mapView.setRegion(region, animated: true)
+            }
+        }
+        
+        func handlePublicUserData(firstName: String?, lastName: String?, error: Error?) {
+            if error == nil {
+                
+                UdacityAPI.PostStudentLocation(firstName: firstName!, lastName: lastName!, mapString: self.locationRetrieved, mediaURL: self.urlRetrieved, latitude: self.latitude, longitude: self.longitude, completion: handlePostStudentResponse(success:error:))
+                
+            } else {
+                showFailure(title: "There was an error!", message: error?.localizedDescription ?? "")
+            }
+        }
+        
+        func handlePostStudentResponse(success: Bool, error: Error?) {
+            
+            if success {
+                let mainTabController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "TabBarController")
+                self.present(mainTabController, animated: true, completion: nil)
+                
+                
+                
+            } else {
+                showFailure(title: "Unable to Save Information", message: error?.localizedDescription ?? "")
+            }
+            
+        }
+        
+        func showFailure(title: String, message: String) {
+            let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            present(alertController, animated: true, completion: nil)
+        }
+        
+        
     }
-    
-}
+ 
