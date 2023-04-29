@@ -3,10 +3,8 @@
 //  map
 //
 //  Created by abdiqani on 01/02/23.
-//
 
 import UIKit
-import CoreData
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {

@@ -58,25 +58,7 @@ enum Endpoints {
             case .webAuth: return "https://auth.udacity.com/sign-up"
             case .createNewLocation:
                 return "https://onthemap-api.udacity.com/v1/StudentLocation"
-//            case let .getStudentsLocation(by):
-//                switch by {
-//                case let .limit(by):
-//                    return Endpoints.base + "StudentLocation" + "?limit=\(by)"
-//                case let .skip(limit, skipBy):
-//                    return Endpoints.base + "StudentLocation" + "?limit=\(limit)" + "&skip=\(skipBy))"
-//                case let .order(by):
-//                    return Endpoints.base + "StudentLocation" + "?order=\(by)updatedAt"
-//                case let .uniqueKey(id):
-//                    return Endpoints.base + "StudentLocation" + "?uniqueKey=\(id)"
-//                case let .limitAndOrder(limit, order):
-//                    return Endpoints.base + "StudentLocation" + "?limit=\(limit)" + "&order=\(order)updatedAt"
-//
-//                }
-//
-//            case .getStudentsLocation(by: let by):
-//                <#code#>
-//            case .getStudentsLocation(by: let by):
-//                <#code#>
+
             }
         }
         
@@ -86,7 +68,7 @@ enum Endpoints {
         
     }
     
-//        class func removeSecurityChars(_ data: Data, type: SecurityType) -> Data{
+//      ff  class func removeSecurityChars(_ data: Data, type: SecurityType) -> Data{
 //
 //            switch type {
 //            case .encodedResponse:
@@ -203,7 +185,7 @@ enum Endpoints {
         }
         task.resume()
     }
-    
+      
     class func logout(completionHandler: @escaping (Error?) -> Void){
         
         var request = URLRequest(url: Endpoints.logout.url)

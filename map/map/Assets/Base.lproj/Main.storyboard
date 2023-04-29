@@ -108,11 +108,11 @@
                     </view>
                     <navigationItem key="navigationItem" id="WvS-h4-RzC"/>
                     <connections>
-                        <outlet property="Email" destination="mFI-e1-YqS" id="SGA-eF-cwr"/>
                         <outlet property="Login" destination="Z3D-GB-bgG" id="cv6-uD-Ydc"/>
                         <outlet property="Password" destination="nps-pC-E7l" id="tAy-QQ-5U9"/>
                         <outlet property="SingUp" destination="Uju-aY-6Ss" id="hcC-QH-eWj"/>
                         <outlet property="activityViewIndicatior" destination="lU6-PN-qRG" id="wAF-2W-LAo"/>
+                        <outlet property="email" destination="mFI-e1-YqS" id="DgO-mc-aJE"/>
                         <outlet property="label" destination="sT2-wJ-7wA" id="8Ow-gM-kbp"/>
                         <segue destination="Fy1-Cd-s1y" kind="show" identifier="completeLogin" id="brI-Sy-CEH"/>
                     </connections>
@@ -185,7 +185,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="MapView" destination="qzw-gX-xsK" id="qZ8-pi-KUv"/>
-                        <outlet property="refreshButton" destination="dst-fb-BLp" id="snn-U1-0th"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yu8-OP-Tem" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -411,8 +410,8 @@
                             </tableViewCell>
                         </prototypes>
                         <connections>
-                            <outlet property="dataSource" destination="Q7L-aO-eQf" id="oJK-R2-NYY"/>
-                            <outlet property="delegate" destination="Q7L-aO-eQf" id="EpJ-4i-HmJ"/>
+                            <outlet property="dataSource" destination="aYr-TF-4y6" id="VDI-nP-ldZ"/>
+                            <outlet property="delegate" destination="aYr-TF-4y6" id="ZOO-be-cuy"/>
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="Q7L-aO-eQf">
